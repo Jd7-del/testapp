@@ -1,0 +1,34 @@
+{
+  "name": "supportbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bin/www",
+    "debug": "nodemon --inspect bin/www"
+  },
+  "dependencies": {
+    "connect": "^3.6.6",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "ejs": "^2.6.1",
+    "express": "4.16.3",
+    "minimist": "^1.2.5",
+    "moment": "^2.22.2",
+    "morgan": "^1.9.0",
+    "node-schedule": "^1.3.0",
+    "request": "^2.87.0",
+    "sc-errors": "^1.4.0",
+    "sc-framework-health-check": "^2.0.0",
+    "sc-hot-reboot": "^1.0.0",
+    "scc-broker-client": "^5.0.2",
+    "serve-static": "1.13.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Jason Delgado M.",
+  "license": "GPL"
+}
