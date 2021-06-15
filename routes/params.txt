@@ -1,0 +1,16 @@
+# tanques (capacidad en litros)
+A = 10
+B = 25
+C = 30
+D = 53
+
+# tuberías (litros/segundo)
+A,B = 1
+A,C = 4
+C,D = 8
+
+# flujo de entrada al sistema (litros/segundo)
+4
+
+# tiempo (segundos)
+20

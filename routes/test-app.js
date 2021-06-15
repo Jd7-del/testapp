@@ -3,6 +3,10 @@ const router = express.Router();
 const { Tanque, } = require('./tanque');
 const { Tuberia, } = require('./tuberia');
 
+// caraterisca para lectura
+const fs = require('fs');
+const readline = require('readline');
+
 /*
  -- luis@kommit.co
  -- https://gist.github.com
@@ -62,12 +66,74 @@ let recorrerModelo = (tanque, cantidadBombeo) => {
   }
 }
 
+/**
+ * Lee archivo de texto y devuelve objeto con parametros
+ */
+async function leerArgumentos() {
+  const fileStream = fs.createReadStream('./routes/params.txt');
+  const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity });
+
+  // inicia parametros permitidos
+  const flujoEntrada = null;
+  const tiempo = null;
+  const tanques = [];
+  const tuberias = [];
+  
+  let cabecera = "";
+  let flagCabecera = false;
+
+  const auxResult = {
+    tanques: [],
+    tuberias: [],
+    flujo: [],
+    tiempo: []
+  };
+
+  for await (const line of rl) {
+    flagCabecera = false;
+
+    if(line != "") {
+      if (line == "# tanques (capacidad en litros)") {
+        cabecera = "tanques";
+        flagCabecera = true;
+      } else if (line == "# tuberías (litros/segundo)") {
+        cabecera = "tuberias";
+        flagCabecera = true;
+      } else if (line == "# flujo de entrada al sistema (litros/segundo)") {
+        cabecera = "flujo";
+        flagCabecera = true;
+      } else if (line == "# tiempo (segundos)") {
+        cabecera = "tiempo";
+        flagCabecera = true;
+      }
+  
+      if(!flagCabecera){
+        //console.log("cabecera", cabecera, " valor linea: ", line);
+        let auxEspacios = line.replace(/ /g, "")
+        auxResult[cabecera].push(auxEspacios);
+      }    
+    }
+  }
+
+
+  // leer tanques
+
+  // leer tuberias
+
+  // leer flujo
+
+  // leer tiempo
+
+  
+  console.log(JSON.stringify(auxResult));
+
+}
 
 // test url -> supportbot/testapp/?var1=76&var2=56565
 router.get('/testapp/', (req, res, next) => {
   //const { var1, var2, } = req.query;
   //const filterUser = idusuario ? idusuario.split(',') : [];
-
+  leerArgumentos();
   /**
    * Generando tanques - v1 staticos
    * recorrer array para segunda versión
@@ -123,28 +189,21 @@ router.get('/testapp/', (req, res, next) => {
     const tDelay = (Number(delay) * 1000);
     const flujo = 4; // litros
 
-
     for (var i = 1; i <= tiempo; i++) {
-      console.log("iteracion:", i);
-      // Flujo bombear
-      /*
-        1. llegan litros
-        2. bombear
-        3. recorrer modelo
-        3. si el tanque hijo está libre bombear hijo
-        4. si el tanque hijo está lleno agregar litros al tanque actual
-      */
+      //console.log("iteracion:", i);
 
+      // Flujo bombear
       recorrerModelo(modelo[0], flujo);
       /*
       modelo.forEach((item, i) => {
         recorrerModelo(item, flujo);
       });
       */
+      /*
       modelo.forEach((item, i) => {
         console.log('Estado -> ', "Tag:", item.getName(), " Cantidad litros:", item.getEstado(), " Tanque lleno:", item.estaLleno());
       });
-
+      */
       setTimeout(() => {  console.log(); }, tDelay);
       // mostrar estado tanques
     }
