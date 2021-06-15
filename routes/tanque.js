@@ -1,3 +1,9 @@
+
+/**
+ * Clase que representa a los nodos del modelo de simulación
+ * @param {*} nombre referencia al etiqueta del nodo
+ * @param {*} capacidad referencia a la capacidad en litros del tanque
+ */
 let Tanque  = class {
 
     constructor(nombre, capacidad) {

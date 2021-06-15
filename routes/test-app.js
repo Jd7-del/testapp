@@ -10,13 +10,14 @@ const readline = require('readline');
 /*
  -- luis@kommit.co
  -- https://gist.github.com
-
- 1. recorer todo el recorrer modelo
- 2. validar que todos los hermanos esten llenos
- 3. si no están llenos bombear
- 4. repetir
 */
-let recorrerModelo = (tanque, cantidadBombeo) => {
+
+/**
+ * Función que permite nodos dentro del modelo de simulación
+ * @param {*} tanque referencia al nodo
+ * @param {*} cantidadBombeo referencia a la cantidad de litros en bombeo
+ */
+function recorrerModelo (tanque, cantidadBombeo) {
   let auxCantidadBombeo = cantidadBombeo;
   // Recorrer tuberias, si las tiene
   if(tanque.getTuberias().length > 0) {
@@ -68,6 +69,7 @@ let recorrerModelo = (tanque, cantidadBombeo) => {
 
 /**
  * Lee archivo de texto y devuelve objeto con parametros
+ * @returns modelo para simulación
  */
 async function leerArgumentos() {
   const fileStream = fs.createReadStream('./routes/params.txt');
@@ -172,17 +174,20 @@ async function leerArgumentos() {
   };
 }
 
-// test url -> test/testapp
-router.get('/testapp/', async (req, res, next) => {
-  const modelo = await leerArgumentos();
-  console.log(modelo);
+/**
+ * 
+ * @param {*} modelo referencia a modelo para simulación
+ * @param {*} base referencia nodo base
+ * @param {*} tiempo referencia a iteraciones
+ * @param {*} flujo referencia a flujo por iteración
+ */
+async function ejecutarSimulacion(modelo, base, tiempo, flujo) {
+  
+  for (var i = 1; i <= tiempo; i++) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      recorrerModelo(base, flujo);
 
-  for (var i = 1; i <= modelo.tiempo; i++) {
-      console.log("iteracion:", i);
-
-      // Flujo bombear
-      recorrerModelo(modelo.tanques[0], modelo.flujoEntrada);
-      
+      console.log("\nIteracion:", i);
       modelo.tanques.forEach((item, i) => {
         console.log(
           'Estado -> ',
@@ -191,12 +196,16 @@ router.get('/testapp/', async (req, res, next) => {
           item.getEstado(),
           (item.estaLleno() ? 'tanque lleno' : 'tanque con espacio')
         );
-      });
-      
-      setTimeout(() => {  console.log(); }, 1000);
-      // mostrar estado tanques
-    }
+      });  
 
+  }
+}
+
+// test url -> http://localhost:8000/test/testapp/
+router.get('/testapp/', async (req, res, next) => {
+  const modelo = await leerArgumentos();
+
+  await ejecutarSimulacion(modelo, modelo.tanques[0], modelo.tiempo, modelo.flujoEntrada);  
   res.send('generando modelo...');
 
 });
