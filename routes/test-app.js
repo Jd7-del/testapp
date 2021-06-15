@@ -74,8 +74,8 @@ async function leerArgumentos() {
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity });
 
   // inicia parametros permitidos
-  const flujoEntrada = null;
-  const tiempo = null;
+  let flujoEntrada = '';
+  let tiempo = '';
   const tanques = [];
   const tuberias = [];
   
@@ -117,16 +117,44 @@ async function leerArgumentos() {
 
 
   // leer tanques
+  auxResult.tanques.forEach(linea => {
+    auxTanque = linea.split('=');
+    tanques.push(new Tanque(auxTanque[0], auxTanque[1]));
+  });
+
+  // listado de tanques
+  tanques.forEach(element => { console.log(element); });
 
   // leer tuberias
+  auxResult.tuberias.forEach((linea, i) => {
+    auxTuberia = linea.split('=');
+    auxLlave = auxTuberia[0].split(',');
+    
+    auxInicio = auxLlave[0];
+    auxDestino = auxLlave[1];
+    auxCapacidad = auxTuberia[1];
+
+    tuberias.push(new Tuberia('tuberia'+i, auxCapacidad, auxDestino));
+  })
+
+  // listado de tuberias
+  tuberias.forEach(element => { console.log(element); });
 
   // leer flujo
+  auxResult.flujo.forEach(linea => {
+    flujoEntrada = linea;
+  })
 
   // leer tiempo
+  auxResult.tiempo.forEach(linea => {
+    tiempo = linea;
+  })
 
+
+  // settear tuberias
   
-  console.log(JSON.stringify(auxResult));
 
+  console.log(JSON.stringify(auxResult), flujoEntrada, tiempo);
 }
 
 // test url -> supportbot/testapp/?var1=76&var2=56565
