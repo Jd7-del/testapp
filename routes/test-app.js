@@ -142,7 +142,7 @@ router.get('/testapp/', (req, res, next) => {
       });
       */
       modelo.forEach((item, i) => {
-        console.log('Estado -> ', item.getName(), item.getEstado(), item.estaLleno());
+        console.log('Estado -> ', "Tag:", item.getName(), " Cantidad litros:", item.getEstado(), " Tanque lleno:", item.estaLleno());
       });
 
       setTimeout(() => {  console.log(); }, tDelay);
