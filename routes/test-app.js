@@ -123,7 +123,7 @@ async function leerArgumentos() {
   });
 
   // listado de tanques
-  tanques.forEach(element => { console.log(element); });
+  //tanques.forEach(element => { console.log(element); });
 
   // leer tuberias
   auxResult.tuberias.forEach((linea, i) => {
@@ -134,11 +134,11 @@ async function leerArgumentos() {
     auxDestino = auxLlave[1];
     auxCapacidad = auxTuberia[1];
 
-    tuberias.push(new Tuberia('tuberia'+i, auxCapacidad, auxDestino));
+    tuberias.push(new Tuberia('tuberia'+i, auxCapacidad, null, auxInicio, auxDestino));
   })
 
   // listado de tuberias
-  tuberias.forEach(element => { console.log(element); });
+  //tuberias.forEach(element => { console.log(element); });
 
   // leer flujo
   auxResult.flujo.forEach(linea => {
@@ -151,10 +151,22 @@ async function leerArgumentos() {
   })
 
 
-  // settear tuberias
-  
+  // settear tuberias inicios
+  tuberias.forEach(tuberia => {
+    tanques.forEach(tanque => {
+      if(tanque.getName() === tuberia.getTagInicio()) {
+        tanque.getTuberias().push(tuberia);
+      }
 
-  console.log(JSON.stringify(auxResult), flujoEntrada, tiempo);
+      if(tanque.getName() === tuberia.getTagDestino()) {
+        tuberia.setDestino(tanque);
+      }
+
+    });
+  });
+
+  console.log(tanques, flujoEntrada, tiempo);
+  return tanques;
 }
 
 // test url -> supportbot/testapp/?var1=76&var2=56565
