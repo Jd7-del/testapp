@@ -13,4 +13,4 @@ C,D = 8
 4
 
 # tiempo (segundos)
-20
+30

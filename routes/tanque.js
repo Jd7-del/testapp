@@ -30,14 +30,15 @@ let Tanque  = class {
   
     // llena los litros que se le envia
     bombear(litros) {
+      
       // Refactorizar validar litros inconsistentes
-      const auxAgregar = (this.litrosOcupados + litros);
+      const auxAgregar = (this.litrosOcupados + Number(litros));
       const residuo = (auxAgregar - this.capacidad);
   
       if(residuo > 0) {
         this.litrosOcupados = this.capacidad;
       } else {
-        this.litrosOcupados = this.litrosOcupados + litros;
+        this.litrosOcupados = this.litrosOcupados + Number(litros);
       }
   
       if (this.litrosOcupados >= this.capacidad) {

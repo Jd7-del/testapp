@@ -165,90 +165,40 @@ async function leerArgumentos() {
     });
   });
 
-  console.log(tanques, flujoEntrada, tiempo);
-  return tanques;
+  return {
+    tanques,
+    tiempo,
+    flujoEntrada
+  };
 }
 
-// test url -> supportbot/testapp/?var1=76&var2=56565
-router.get('/testapp/', (req, res, next) => {
-  //const { var1, var2, } = req.query;
-  //const filterUser = idusuario ? idusuario.split(',') : [];
-  leerArgumentos();
-  /**
-   * Generando tanques - v1 staticos
-   * recorrer array para segunda versión
-   # tanques (capacidad en litros)
-   A = 10
-   B = 25
-   C = 30
-   D = 53
-   */
-  const tanqueA = new Tanque('A', 10);
-  const tanqueB = new Tanque('B', 25);
-  const tanqueC = new Tanque('C', 30);
-  const tanqueD = new Tanque('D', 53);
+// test url -> test/testapp
+router.get('/testapp/', async (req, res, next) => {
+  const modelo = await leerArgumentos();
+  console.log(modelo);
 
-  /**
-   * Generando tuberias - v1 staticos
-   * recorrer array para segunda versión
-   # tuberías (litros/segundo)
-   A,B = 1
-   A,C = 4
-   C,D = 8
-   */
-   // (name, capacidad, inicio, destinto)
-   const tuberiaUno = new Tuberia('tuberia uno', 1, tanqueB);
-   const tuberiaDos = new Tuberia('tuberia dos', 4, tanqueC);
-   const tuberiaTres = new Tuberia('tuberia tres', 8, tanqueD);
-
-   /**
-    * Settear tuberias a tanques
-    * recorrer para segunda version
-    */
-   tanqueA.agregarTuberia(tuberiaUno);
-   tanqueA.agregarTuberia(tuberiaDos);
-   tanqueC.agregarTuberia(tuberiaTres);
-
-   /**
-    * Refactorizar recorrer parametro de entrada del modelo
-    */
-   const modelo = [];
-   modelo.push(tanqueA);
-   modelo.push(tanqueB);
-   modelo.push(tanqueC);
-   modelo.push(tanqueD);
-
-   /**
-    Iniciar modelo
-    tiempo: 20 segundos
-    delay: 1
-    flujo: 4 litros (todo el model en litros)
-    */
-    const tiempo = 40; // segundos - 20 by test
-    const delay = 1; // segundos
-    const tDelay = (Number(delay) * 1000);
-    const flujo = 4; // litros
-
-    for (var i = 1; i <= tiempo; i++) {
-      //console.log("iteracion:", i);
+  for (var i = 1; i <= modelo.tiempo; i++) {
+      console.log("iteracion:", i);
 
       // Flujo bombear
-      recorrerModelo(modelo[0], flujo);
-      /*
-      modelo.forEach((item, i) => {
-        recorrerModelo(item, flujo);
+      recorrerModelo(modelo.tanques[0], modelo.flujoEntrada);
+      
+      modelo.tanques.forEach((item, i) => {
+        console.log(
+          'Estado -> ',
+          "Tag:", item.getName(), 
+          " Cantidad litros:", 
+          item.getEstado(),
+          (item.estaLleno() ? 'tanque lleno' : 'tanque con espacio')
+        );
       });
-      */
-      /*
-      modelo.forEach((item, i) => {
-        console.log('Estado -> ', "Tag:", item.getName(), " Cantidad litros:", item.getEstado(), " Tanque lleno:", item.estaLleno());
-      });
-      */
-      setTimeout(() => {  console.log(); }, tDelay);
+      
+      setTimeout(() => {  console.log(); }, 1000);
       // mostrar estado tanques
     }
 
   res.send('generando modelo...');
+
 });
 
 
